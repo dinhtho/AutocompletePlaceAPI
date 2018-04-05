@@ -16,6 +16,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
@@ -44,16 +45,20 @@ public class MainActivity extends AppCompatActivity implements
         mAutocompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
         mAutocompleteTextView.setThreshold(3);
         mNameView = (TextView) findViewById(R.id.name);
-        Log.e(TAG, "onCreate: "+Places.GEO_DATA_API );
+
         mGoogleApiClient = new GoogleApiClient.Builder(MainActivity.this)
                 .addApi(Places.GEO_DATA_API)
                 .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
                 .addConnectionCallbacks(this)
                 .build();
 
+        // restriction in VN
+        AutocompleteFilter filter =
+                new AutocompleteFilter.Builder().setCountry("VN").build();
+
         mAutocompleteTextView.setOnItemClickListener(mAutocompleteClickListener);
         mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
-                BOUNDS_MOUNTAIN_VIEW, null);
+                BOUNDS_MOUNTAIN_VIEW, filter);
         mAutocompleteTextView.setAdapter(mPlaceArrayAdapter);
 
     }
